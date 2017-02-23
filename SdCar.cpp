@@ -18,9 +18,9 @@
 using namespace cv;
 
 
-void StartCamera(){
+void TestCamera(){
 
-Mat initframe,blurr,B_W,edges;
+Mat initframe,blurr,B_W,edges,Image;
 VideoCapture cap;
 cap.open(0);
 cap.set(CAP_PROP_FRAME_WIDTH,500);
@@ -55,12 +55,17 @@ if(waitKey(30)>= 0) break;
 	
 }
 
+void AutoDrive(){
+	
+}
+
 void SysMenu(){
 	system("clear");
 int choice;
 	printf("||Please Choose An Option..........||\n");
 	printf("||1.Test Motors   || 2.Test Sensors||\n");
-	printf("||3.Test Camera   || 4.Exit        ||\n");
+	printf("||3.Test Camera   || 4.Drive Mode  ||\n");
+	printf("||5.Exit          ||               ||\n");
 	scanf("%i",&choice);
 	
 	switch(choice)
@@ -89,11 +94,15 @@ case 2 :
     break;
     
 case 3 :
-StartCamera();
+TestCamera();
 	SysMenu();
 	break;
 
 case 4 :
+AutoDrive();
+break;
+
+case 5 :
 break;
 
 
@@ -102,6 +111,7 @@ default : printf("Input, Option Not available, Please retry");
     break;  
 }
 }
+
 
 int main(int, char**) {
 initialisePins();
