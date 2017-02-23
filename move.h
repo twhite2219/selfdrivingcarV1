@@ -57,7 +57,22 @@ void move(unsigned int flags, int msecs)
 	delay(50);
 }
 
-
+void TestMotor(){
+	printf("fwd\n");
+	move(MT_FORWARD, 3000);
+	printf("bwd\n");
+	move(MT_BACKWARD, 3000);
+	printf("rght\n");
+		move(MT_RIGHT, 3000);
+	printf("left\n");
+	move(MT_LEFT, 3000);
+	printf("fwd, right\n");
+	move(MT_FORWARD | MT_RIGHT, 3000);
+	printf("fwd left\n");
+	move(MT_FORWARD | MT_LEFT, 3000);
+	
+	
+}
 
 
 
