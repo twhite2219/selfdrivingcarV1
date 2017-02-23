@@ -19,13 +19,56 @@
 using namespace cv;
 
 
-void AutoDrive(){
+int AutoDrive(){
 	
+
+Mat initframe,blurr,B_W,edges,Image;
+VideoCapture cap;
+cap.open(0);
+cap.set(CAP_PROP_FRAME_WIDTH,500);
+cap.set(CAP_PROP_FRAME_HEIGHT,500);
+
+	
+ if (cap.isOpened()){ 
+	for(;;){
+		cap.read(initframe);
+		if (initframe.empty()){	printf("error frame empty/n");	break;}
+		
+			imshow("Live Stream",initframe);		//normal bgr output
+
+			cvtColor(initframe,B_W,CV_BGR2GRAY);//b&W stream
+			//imshow("greyscale",B_W);
+	
+			GaussianBlur(B_W,blurr,Size(9,9),1.5,1.5);//blur applied so edge detction is smoother (less hard edges)
+			//imshow("blurr",blurr);
+
+			Canny(blurr,edges,0,30,3);//edge detection
+			imshow("edges",edges);
+			
+			if (ObjectDetection() ==0){
+			fflush(stdout);
+			printf("\rProceesing available                           ");
+			
+			
+
+	
+	
+			
+			}else {fflush(stdout); printf("\rObject Identified within 15cm, Waiting...");}//main object detection loop which will print error until objet is removed
+	
+	if(waitKey(30)>= 0) break;	
+	}//for loop for processing part being run, terminates on keypress
+
+}else printf("Error! unable to Connect to camera\n");//outer loop for camera being on
+	
+	return 0;
 }
+ 
 
 void SysMenu(){
+	int choice=0;
+	while(choice !=5){
 	system("clear");
-int choice;
 	printf("||Please Choose An Option..........||\n");
 	printf("||1.Test Motors   || 2.Test Sensors||\n");
 	printf("||3.Test Camera   || 4.Drive Mode  ||\n");
@@ -37,18 +80,15 @@ int choice;
 case 1: 
     TestMotor();
 	delay(3000);
-	SysMenu();
     break;
 
 case 2 : 
    TestSensors();
     delay(3000);
-    SysMenu();
     break;
     
 case 3 :
 TestCamera();
-	SysMenu();
 	break;
 
 case 4 :
@@ -60,12 +100,10 @@ break;
 
 
 default : printf("Input, Option Not available, Please retry");
-    SysMenu();
-    break;  
+    break; 
 }
 }
-
-
+}
 int main(int, char**) {
 initialisePins();
 SysMenu();

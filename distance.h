@@ -65,6 +65,15 @@ void TestSensors(){
 	printf("||     REVERTING TO MAIN MENU      ||\n");
 }
 
+int ObjectDetection(){
+	int A= (DistanceSenseA());
+	int B= (DistanceSenseB());
+	if(A<15 || B<15)
+	return 1;
+	else return 0;
+	} 
+	
+
 
 
 #endif

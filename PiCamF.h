@@ -54,11 +54,4 @@ if(waitKey(30)>= 0) break;
 	
 }
 
-
-
-
-
-
-
-
 #endif
