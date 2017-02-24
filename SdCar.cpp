@@ -22,11 +22,11 @@ using namespace cv;
 int AutoDrive(){
 	
 
-Mat initframe,blurr,B_W,edges,Image;
+Mat initframe,blurr,B_W,edges,image,flat_Img,arr_Img;
 VideoCapture cap;
 cap.open(0);
-cap.set(CAP_PROP_FRAME_WIDTH,500);
-cap.set(CAP_PROP_FRAME_HEIGHT,500);
+cap.set(CAP_PROP_FRAME_WIDTH,20);
+cap.set(CAP_PROP_FRAME_HEIGHT,20);
 
 	
  if (cap.isOpened()){ 
@@ -45,20 +45,24 @@ cap.set(CAP_PROP_FRAME_HEIGHT,500);
 			Canny(blurr,edges,0,30,3);//edge detection
 			imshow("edges",edges);
 			
-			if (ObjectDetection() ==0){
-			fflush(stdout);
-			printf("\rProceesing available                           ");
+			if (ObjectDetection() ==0){//within loop where processing can occur
+				fflush(stdout);
+				printf("\rProceesing available                           ");
 			
-			
-
+				cap.read(edges);//take frame from edges
+				flat_Img = edges.reshape(1,1);//converts image row by row to 1 by x res
+				flat_Img.convertTo(arr_Img,CV_32FC3,1/255.0); //converts 1 by x imaeg to an array  
+				imshow("arr_img",arr_Img);//show array values on screen
+				
+				
+				
 	
-	
-			
+				if(waitKey(30)>= 0) break;
 			}else {fflush(stdout); printf("\rObject Identified within 15cm, Waiting...");}//main object detection loop which will print error until objet is removed
 	
 	if(waitKey(30)>= 0) break;	
 	}//for loop for processing part being run, terminates on keypress
-
+		cap.release();
 }else printf("Error! unable to Connect to camera\n");//outer loop for camera being on
 	
 	return 0;
