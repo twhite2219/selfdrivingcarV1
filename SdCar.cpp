@@ -20,53 +20,7 @@
 #include "PiCamF.h"
 using namespace cv;
 using namespace std;
- void takephotos(){
-	 
-	 
 
-Mat initframe,blurr,B_W,edges,image,flat_Img,arr_Img;
-VideoCapture cap;
-cap.open(0);
-cap.set(CAP_PROP_FRAME_WIDTH,20);
-cap.set(CAP_PROP_FRAME_HEIGHT,20);
-
-	
- if (cap.isOpened()){ 
-	 int ct =0;
-	for(;;){
-		ct++;
-		cap.read(initframe);
-		if (initframe.empty()){	printf("error frame empty/n");	break;}
-		
-			imshow("Live Stream",initframe);		//normal bgr output
-
-			cvtColor(initframe,B_W,CV_BGR2GRAY);//b&W stream
-			//imshow("greyscale",B_W);
-	
-			GaussianBlur(B_W,blurr,Size(9,9),1.5,1.5);//blur applied so edge detction is smoother (less hard edges)
-			//imshow("blurr",blurr);
-
-			Canny(blurr,edges,0,30,3);//edge detection
-			imshow("edges",edges);
-		stringstream ss;
-		string name = "";
-		string type = ".jpg";
-
-		
-		
-		ss << name << (ct) << type;
-		string filename = ss.str();
-		ss.str("");
-		imwrite(filename, edges);
-		delay(200);
-			
-	if(waitKey(30)>= 0) break;	
-}
-		cap.release();
-}else printf("Error! unable to Connect to camera\n");//outer loop for camera being on
-	
-
- }
  
  
  
@@ -136,8 +90,9 @@ void SysMenu(){
 	system("clear");
 	printf("||Please Choose An Option..........||\n");
 	printf("||1.Test Motors   || 2.Test Sensors||\n");
-	printf("||3.Test Camera   || 4.Drive Mode  ||\n");
-	printf("||5.Test NN       || 6.Exit        ||\n");
+	printf("||3.Test Camera   || 4.Take tImages||\n");
+	printf("||5.Auto Drive    || 6.Test NN     ||\n");
+	printf("||7.Exit          ||               ||\n");
 	scanf("%i",&choice);
 	
 	switch(choice)
@@ -157,15 +112,18 @@ TestCamera();
 	break;
 
 case 4 :
-//AutoDrive();
 takephotos();
 
 break;
 
 case 5 :
+AutoDrive();
 break;
 
 case 6 :
+break;
+
+case 7 :
 break;
 
 default : printf("Input, Option Not available, Please retry");
