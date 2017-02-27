@@ -8,6 +8,7 @@
 #include <softPwm.h>
 #include "network.h"
 #include "move.h"
+#include <sstream>
 #include <iostream>
 #include "distance.h"
 #include <linux/videodev2.h>
@@ -26,11 +27,11 @@ using namespace std;
 	
 	
 char const *path = "/home/pi/selfdrivingcarV1/train_data";//needs folders of 0 1 2 3  holdig 50 pics each for representing outputs
-int const numFilesDirs[]={50,50,50}; //number of photos for each direction (fwd l r)
-char const strDirs[]={'0','1','2'}; //optional outputs " 0=go,1 left 2 right
+int const numFilesDirs[]={110,95,63}; //number of photos for each direction (fwd l r)
+char const strDirs[]={'0','1','2'}; //optional outputs " 0=go,1 right 2 left
 int const numDirs = 3;//number of directions
 
-cv::Ptr<cv::ml::ANN_MLP> ann = cv::ml::ANN_MLP::create();
+//cv::Ptr<cv::ml::ANN_MLP> ann = cv::ml::ANN_MLP::create();
 
 
 void readScanStore(){
