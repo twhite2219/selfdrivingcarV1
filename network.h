@@ -51,10 +51,12 @@ for (int i=0;i!=numDirs; i++){//outer for loop to go through all 4 output option
 		
 		if (!img.data)
 		cout << "error no file found " << ss << endl;
+		
+		
 			//Size size(10,10);
 			//Mat ImgCon;
 			//resize(img,ImgCon,size);
-			//ImgCon.reshape(1,1);
+			img.reshape(1,1);
 		//assume img is continous
 			//reshape image to 1xtotal res 
 			

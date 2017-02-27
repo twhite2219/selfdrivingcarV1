@@ -142,8 +142,8 @@ initialisePins();
 SysMenu();
 gpioTerminate();
 
-readScanStore();
-convertLabels();
+//readScanStore();
+//convertLabels();
 
  return 0;
 }
