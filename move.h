@@ -2,7 +2,9 @@
 #define MOVE_H
 
 #include "distance.h"
+#include "network.h"
 #include "init.h"
+#include <iostream>
 #include <pigpio.h>
 //#include <stdlib.h>
 //#include <unistd.h>

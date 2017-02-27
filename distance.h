@@ -4,6 +4,7 @@
 
 #include "init.h"
 #include "move.h"
+#include "network.h"
 #include <pigpio.h>
 //#include <stdlib.h>
 //#include <unistd.h>

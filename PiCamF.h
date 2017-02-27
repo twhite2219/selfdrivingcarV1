@@ -4,6 +4,7 @@
 #include "distance.h"
 #include "init.h"
 #include <iostream>
+#include "network.h"
 #include "distance.h"
 #include <linux/videodev2.h>
 #include <../include/libv4l2.h>
