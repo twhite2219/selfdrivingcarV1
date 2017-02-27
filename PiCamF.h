@@ -5,6 +5,7 @@
 #include "init.h"
 #include <iostream>
 #include "network.h"
+#include <sstream>
 #include "distance.h"
 #include <linux/videodev2.h>
 #include <../include/libv4l2.h>
@@ -16,7 +17,7 @@
 #include <opencv2/videoio.hpp>
 #include "move.h"
 using namespace cv;
-
+using namespace std;
 
 void TestCamera(){
 

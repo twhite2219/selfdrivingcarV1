@@ -86,13 +86,13 @@ cap.set(CAP_PROP_FRAME_HEIGHT,10);
  
 void SysMenu(){
 	int choice=0;
-	while(choice !=5){
+	while(choice !=8){
 	system("clear");
 	printf("||Please Choose An Option..........||\n");
 	printf("||1.Test Motors   || 2.Test Sensors||\n");
 	printf("||3.Test Camera   || 4.Take tImages||\n");
 	printf("||5.Auto Drive    || 6.Test NN     ||\n");
-	printf("||7.Exit          ||               ||\n");
+	printf("||7.XML.store     || 8.Exit        ||\n");
 	scanf("%i",&choice);
 	
 	switch(choice)
@@ -121,9 +121,14 @@ AutoDrive();
 break;
 
 case 6 :
+//test NN
 break;
 
 case 7 :
+readScanStore();
+break;
+
+case 8 :
 break;
 
 default : printf("Input, Option Not available, Please retry");
