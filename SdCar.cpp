@@ -113,7 +113,6 @@ TestCamera();
 
 case 4 :
 takephotos();
-
 break;
 
 case 5 :
@@ -122,6 +121,7 @@ break;
 
 case 6 :
 trainNetwork();
+printf("end");
 break;
 
 case 7 :
