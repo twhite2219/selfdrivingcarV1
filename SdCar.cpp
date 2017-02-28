@@ -17,6 +17,7 @@
 #include <opencv2/imgproc/imgproc.hpp>
 #include <opencv2/highgui/highgui.hpp>  
 #include <opencv2/videoio.hpp>
+#include <opencv2/ml.hpp>
 #include "PiCamF.h"
 using namespace cv;
 using namespace std;
@@ -33,54 +34,61 @@ cap.open(0);
 cap.set(CAP_PROP_FRAME_WIDTH,10);
 cap.set(CAP_PROP_FRAME_HEIGHT,10);
 
-	
- if (cap.isOpened()){ 
-	for(;;){
-		cap.read(initframe);
-		if (initframe.empty()){	printf("error frame empty/n");	break;}
+
+FileStorage fs("NNPARAMS.xml",FileStorage::READ);
+Ptr<ml::ANN_MLP> Neural_Net = cv::Algorithm::read<ml::ANN_MLP>(fs.root());
+	if (!Neural_Net->isTrained()) printf("network not trained \n");
+	else {
 		
-			imshow("Live Stream",initframe);		//normal bgr output
+		if (cap.isOpened()){ 
+			for(;;){
+			cap.read(initframe);
+			if (initframe.empty()){	printf("error frame empty/n");	break;}
+		
+				imshow("Live Stream",initframe);		//normal bgr output
 
-			cvtColor(initframe,B_W,CV_BGR2GRAY);//b&W stream
-			//imshow("greyscale",B_W);
+				cvtColor(initframe,B_W,CV_BGR2GRAY);//b&W stream
+				//imshow("greyscale",B_W);
+		
+				GaussianBlur(B_W,blurr,Size(9,9),1.5,1.5);//blur applied so edge detction is smoother (less hard edges)
+				//imshow("blurr",blurr);
 	
-			GaussianBlur(B_W,blurr,Size(9,9),1.5,1.5);//blur applied so edge detction is smoother (less hard edges)
-			//imshow("blurr",blurr);
-
-			Canny(blurr,edges,0,30,3);//edge detection
-			imshow("edges",edges);
-			
-			if (ObjectDetection() ==0){//within loop where processing can occur
-				fflush(stdout);
-				printf("\rProceesing available                           ");
-			
-				cap.read(edges);//take frame from edges
-				flat_Img = edges.reshape(1,1);//converts image row by row to 1 by x res
-				flat_Img.convertTo(arr_Img,CV_32FC3,1/255.0); //converts 1 by x imaeg to an array  
-				imshow("arr_img",arr_Img);//show array values on screen
+				Canny(blurr,edges,0,30,3);//edge detection
+				imshow("edges",edges);
 				
-				std::vector<uchar> imageArr;//20x20 resolution = 400 bits 
-				if(arr_Img.isContinuous())
-				imageArr.assign(arr_Img.datastart, arr_Img.dataend);
-				else {
-					imageArr.insert(imageArr.end(),arr_Img.ptr<uchar>(0),arr_Img.ptr<uchar> (0)+arr_Img.cols);
+				if (ObjectDetection() ==0){//within loop where processing can occur
+					fflush(stdout);
+					printf("\rProcessing available                           ");
+				
+					cap.read(edges);//take frame from edges
+					flat_Img = edges.reshape(1,1);//converts image row by row to 1 by x res
 					
-				}
 					
+					flat_Img.convertTo(arr_Img,CV_32F);//,1/255.0); //converts 1 by x imaeg to an array  
+					imshow("arr_img",arr_Img);//show array values on screen
 					
-				//for(int i =0; i < sizeof(imageArr) ;i++){
-				//printf("%i  \n",sizeof(imageArr));
-				////printf("%u\n",imageArr[i]);
-				//}
+					//std::vector<uchar> imageArr;//20x20 resolution = 400 bits 
+					//if(arr_Img.isContinuous())
+						//imageArr.assign(arr_Img.datastart, arr_Img.dataend);
+					//else {
+						//imageArr.insert(imageArr.end(),arr_Img.ptr<uchar>(0),arr_Img.ptr<uchar> (0)+arr_Img.cols);
+					
+						//}
+						
+						Mat Result;
+						Mat CurrentImg = Mat::ones(arr_Img.rows,arr_Img.cols, CV_32FC1);
+						Neural_Net->predict(CurrentImg,Result);
+						cout << Result << endl;
+					
 	
-				if(waitKey(30)>= 0) break;
-			}else {fflush(stdout); printf("\rObject Identified within 15cm, Waiting...");}//main object detection loop which will print error until objet is removed
+					if(waitKey(30)>= 0) break;
+				}else {fflush(stdout); printf("\rObject Identified within 15cm, Waiting...");}//main object detection loop which will print error until objet is removed
 	
 	if(waitKey(30)>= 0) break;	
 	}//for loop for processing part being run, terminates on keypress
 		cap.release();
 }else printf("Error! unable to Connect to camera\n");//outer loop for camera being on
-	
+}
 	return 0;
 }
  
