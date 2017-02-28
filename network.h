@@ -25,17 +25,14 @@ using namespace std;
 
 	//need to down scale images to around 50x50 
 	
-	
-char const *path = "/home/pi/selfdrivingcarV1/train_data/";//needs folders of 0 1 2 3  holdig 50 pics each for representing outputs
-int const numFilesDirs[]={110,95,63}; //number of photos for each direction (fwd l r)
-char const strDirs[]={'0','1','2'}; //optional outputs " 0=go,1 right 2 left
-int const numDirs = 3;//number of directions
-
-//cv::Ptr<cv::ml::ANN_MLP> ann = cv::ml::ANN_MLP::create();
 
 
 void readScanStore(){
 cv::Mat trainingData;//mat collectionn of images to train with 
+char const *path = "/home/pi/selfdrivingcarV1/train_data/";//needs folders of 0 1 2 3  holdig 50 pics each for representing outputs
+int const numFilesDirs[]={110,95,63}; //number of photos for each direction (fwd l r)
+char const strDirs[]={'0','1','2'}; //optional outputs " 0=go,1 right 2 left
+int const numDirs = 3;//number of directions
 
 
 cv::Mat trainingLabels (0,0,(CV_32S));
@@ -65,7 +62,7 @@ for (int i=0;i!=numDirs; i++){//outer for loop to go through all 4 output option
 		}
 	}  
 	
-trainingData.convertTo(trainingData, CV_32FC1);//convert all images to cv32f (numeric values)
+trainingData.convertTo(trainingData, CV_32F,1/255.0);//convert all images to cv32f (numeric values)
 
 cv::FileStorage fs("VALUES.xml",FileStorage::WRITE);//store numeric values in xml file as training data values for each image.
 fs << "TrainingData" <<trainingData;//assign each image 
@@ -74,46 +71,13 @@ fs << "classes" << trainingLabels;//assign associated classes
 printf("complete");
 	}
 	
-void convertLabels(){
-	cv::FileStorage fs;
-	fs.open("VALUES.xml",cv::FileStorage::READ);
-	cv::Mat trainData;
-	Mat classes;
-	fs["TrainingData"] >> trainData;
-	fs["classes"] >> classes;
 	
-	//1st element is input nodes (features of sample)
-	//;ast is outputlayer size 
-	//all inbetween are hidden layer
-	
-	int buffer[]={trainData.cols,100,numDirs};
-	printf("%i",trainData.cols);
-	
-	cv::Mat const layers(1,3,CV_32SC1, buffer);
-	//ann->create(layers, cv::ml::ANN_MLP::SIGMOID_SYM,1,1);
-	
-	
-	//prepare trainingclasses reate a mat with n trained data from n classes
-	
-	cv::Mat trainClasses(trainData.rows, numDirs,CV_32FC1);
-	for (int i=0; i !=trainClasses.rows;i++){
-	//	int const labels = *classes.ptr<int>(i);
-		//train_ptr = trainClasses.ptr<float>(i);
-		for (int k=0;k!= trainClasses.cols;k++){
-	//		*train_ptr  k!= labels ?0:1
-		//	train_ptr++;
-		}
-	}
-	cv::Mat const weights = cv::Mat::ones(1,trainData.rows, CV_32FC1);
-	
-	//learn classifier
-	//ann->train(trainData,trainClasses,weights);
-	
-	
-	  
+void trainNetwork(){
 	
 	
 	
-}  
+}
+	
+	
 	
 #endif

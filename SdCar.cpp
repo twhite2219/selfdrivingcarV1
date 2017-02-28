@@ -121,7 +121,7 @@ AutoDrive();
 break;
 
 case 6 :
-//test NN
+trainNetwork();
 break;
 
 case 7 :
@@ -142,8 +142,6 @@ initialisePins();
 SysMenu();
 gpioTerminate();
 
-//readScanStore();
-//convertLabels();
 
  return 0;
 }
