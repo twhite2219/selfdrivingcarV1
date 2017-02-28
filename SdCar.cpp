@@ -37,8 +37,8 @@ cap.set(CAP_PROP_FRAME_HEIGHT,10);
 
 FileStorage fs("NNPARAMS.xml",FileStorage::READ);
 Ptr<ml::ANN_MLP> Neural_Net = cv::Algorithm::read<ml::ANN_MLP>(fs.root());
-	if (!Neural_Net->isTrained()) printf("network not trained \n");
-	else {
+	//if (!Neural_Net->isTrained()) printf("network not trained \n");
+	//else {
 		
 		if (cap.isOpened()){ 
 			for(;;){
@@ -88,7 +88,7 @@ Ptr<ml::ANN_MLP> Neural_Net = cv::Algorithm::read<ml::ANN_MLP>(fs.root());
 	}//for loop for processing part being run, terminates on keypress
 		cap.release();
 }else printf("Error! unable to Connect to camera\n");//outer loop for camera being on
-}
+//}
 	return 0;
 }
  

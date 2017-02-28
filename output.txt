@@ -1,0 +1,3 @@
+OpenCV Error: Assertion failed ((type == CV_32F || type == CV_64F) && inputs.cols == layer_sizes[0]) in predict, file /home/pi/selfdrivingcar/opencv/opencv-3.1.0/modules/ml/src/ann_mlp.cpp, line 251
+terminate called after throwing an instance of 'cv::Exception'
+  what():  /home/pi/selfdrivingcar/opencv/opencv-3.1.0/modules/ml/src/ann_mlp.cpp:251: error: (-215) (type == CV_32F || type == CV_64F) && inputs.cols == layer_sizes[0] in function predict
