@@ -50,14 +50,14 @@ for (int i=0;i!=numDirs; i++){//outer for loop to go through all 4 output option
 		cout << "error no file found " << ss << endl;
 		
 		
-			//Size size(10,10);
-			//Mat ImgCon;
-			//resize(img,ImgCon,size);
-			img.reshape(1,1);
+			Size size(10,10);
+			Mat ImgCon;
+			resize(img,ImgCon,size);
+			ImgCon.reshape(1,1);
 		//assume img is continous
 			//reshape image to 1xtotal res 
 			
-			trainingData.push_back(img); //push back image
+			trainingData.push_back(ImgCon); //push back image
 			trainingLabels.push_back(i);//assign instruction corresponding to image in label set
 		}
 	}  
