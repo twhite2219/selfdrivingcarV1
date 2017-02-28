@@ -1,8 +1,8 @@
 <?xml version="1.0"?>
 <opencv_storage>
 <TrainingData type_id="opencv-matrix">
-  <rows>2680</rows>
-  <cols>10</cols>
+  <rows>268</rows>
+  <cols>100</cols>
   <dt>f</dt>
   <data>
     0. 94. 128. 1. 0. 0. 0. 0. 0. 0. 1. 125. 127. 0. 0. 0. 0. 0. 2. 168.

@@ -49,7 +49,7 @@ for (int i=0;i!=numDirs; i++){//outer for loop to go through all 4 output option
 			Size size(10,10);
 			Mat ImgCon;
 			resize(img,ImgCon,size);
-			ImgCon.reshape(1,1);
+			ImgCon =ImgCon.reshape(1,1);
 		//assume img is continous
 			//reshape image to 1xtotal res 
 			
@@ -88,10 +88,10 @@ printf("sending data to train_test"); // setup the ann:
     
     printf("%i\n",train_classes.rows);
     //////////////////////////////////////////////////////////////////////////
-    ///for(int i=0; i<train_classes.rows; i++)
-    //{
-    //train_classes.at<float>(i, train_labels.at<int>(i)) = 1.f;
-    //}
+  for(int i=0; i<train_classes.rows; i++)
+  {
+  train_classes.at<float>(i, train_labels.at<int>(i)) = 1.f;
+  }
     cerr << train_data.size() << " " << train_classes.size() << endl;
 /////////////////////////////////////////////////////////////////////////////////////  
     ann->train(train_data, ml::ROW_SAMPLE, train_classes);
