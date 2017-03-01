@@ -45,14 +45,14 @@ Ptr<ml::ANN_MLP> Neural_Net = cv::Algorithm::read<ml::ANN_MLP>(fs.root());
 			cap.read(initframe);
 			if (initframe.empty()){	printf("error frame empty/n");	break;}
 		
-				imshow("Live Stream",initframe);		//normal bgr output
+			//	imshow("Live Stream",initframe);		//normal bgr output
 
 				cvtColor(initframe,B_W,CV_BGR2GRAY);//b&W stream
 				
 				GaussianBlur(B_W,blurr,Size(9,9),1.5,1.5);//blur applied so edge detction is smoother (less hard edges)
 		
 				Canny(blurr,edges,0,30,3);//edge detection
-				imshow("edges",edges);
+			//	imshow("edges",edges);
 				
 					if (ObjectDetection() ==0){//within loop where processing can occur
 						fflush(stdout);
