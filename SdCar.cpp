@@ -28,19 +28,18 @@ using namespace std;
 int AutoDrive(){
 	
 
-Mat initframe,blurr,B_W,edges,reSized,flat_Img,arr_Img;
+Mat initframe,blurr,B_W,edges,reSized,reShaped,ReadImg,FinalImg;
 VideoCapture cap;
 Size size(10,10);
 cap.open(0);
-cap.set(CAP_PROP_FRAME_WIDTH,500);
-cap.set(CAP_PROP_FRAME_HEIGHT,500);
+cap.set(CAP_PROP_FRAME_WIDTH,50);
+cap.set(CAP_PROP_FRAME_HEIGHT,50);
 
 
 FileStorage fs("NNPARAMS.xml",FileStorage::READ);
 Ptr<ml::ANN_MLP> Neural_Net = cv::Algorithm::read<ml::ANN_MLP>(fs.root());
-	//if (!Neural_Net->isTrained()) printf("network not trained \n");
-	//else {
-		
+	if (!Neural_Net->isTrained()) printf("network not trained \n");
+	else {
 		if (cap.isOpened()){ 
 			for(;;){
 			cap.read(initframe);
@@ -50,32 +49,41 @@ Ptr<ml::ANN_MLP> Neural_Net = cv::Algorithm::read<ml::ANN_MLP>(fs.root());
 
 				cvtColor(initframe,B_W,CV_BGR2GRAY);//b&W stream
 				
-				   GaussianBlur(B_W,blurr,Size(9,9),1.5,1.5);//blur applied so edge detction is smoother (less hard edges)
+				GaussianBlur(B_W,blurr,Size(9,9),1.5,1.5);//blur applied so edge detction is smoother (less hard edges)
 		
 				Canny(blurr,edges,0,30,3);//edge detection
 				imshow("edges",edges);
 				
-				if (ObjectDetection() ==0){//within loop where processing can occur
-					fflush(stdout);
-					printf("\rProcessing available                           ");
+					if (ObjectDetection() ==0){//within loop where processing can occur
+						fflush(stdout);
+						printf("\rProcessing available                           ");
+						cv::imwrite("currImg.jpg", edges);
 				
-					cap.read(edges);//take frame from edges
+				
+						ReadImg = cv::imread("currImg.jpg",0);
+						if (!ReadImg.data)
+						cout << "error no file found " << endl;
+		
+	
+	
+						//	cap.read(edges);//take frame from edges
 					
-					resize(edges,reSized,size);//resize to 10x10
-					cout <<reSized.size()<<endl;
-					cout <<reSized<<endl;
+						resize(ReadImg,reSized,size);//resize to 10x10
+						cout <<reSized.size()<<endl;
+						cout <<reSized<<endl;
 					
-					flat_Img = reSized.reshape(1,3);//converts image row by row to 1 by x res
-					cout <<flat_Img.size()<<endl;
-					cout <<flat_Img<<endl;
+					reShaped = reSized.reshape(1,1);//converts image row by row to 1 by x res
+					cout <<reShaped.size()<<endl;
+					cout <<reShaped<<endl;
 					
-					flat_Img.convertTo(arr_Img,CV_32F);// 
-			cout <<arr_Img.size()<<endl;
-					cout <<arr_Img<<endl;
-						Mat Result;
+					reShaped.convertTo(FinalImg,CV_32F);// 
+					cout <<FinalImg.size()<<endl;
+					cout <<FinalImg<<endl;
 					
-					Neural_Net->predict(arr_Img,Result);
-						cout << Result << endl;	
+					
+					Mat Result;
+					Neural_Net->predict(FinalImg,Result);
+					cout << Result << endl;	
 					//cvReleaseMat(&initframe);
 					//cvReleaseMat(&B_W);
 					//cvReleaseMat(&blurr);
@@ -90,7 +98,7 @@ Ptr<ml::ANN_MLP> Neural_Net = cv::Algorithm::read<ml::ANN_MLP>(fs.root());
 	}//for loop for processing part being run, terminates on keypress
 		cap.release();
 }else printf("Error! unable to Connect to camera\n");//outer loop for camera being on
-//}
+}
 	return 0;
 }
  
