@@ -50,7 +50,7 @@ for (int i=0;i!=numDirs; i++){//outer for loop to go through all 4 output option
 			Mat ImgCon;
 			resize(img,ImgCon,size);
 			ImgCon =ImgCon.reshape(1,1);
-		//assume img is continous
+			//assume img is continous
 			//reshape image to 1xtotal res 
 			
 			trainingData.push_back(ImgCon); //push back image
@@ -78,12 +78,12 @@ void train_test(int nclasses, const Mat &train_data, const Mat &train_labels, Ma
     layers(3) = nclasses;      // output, 1 pin per class.
     ann->setLayerSizes(layers);
     ann->setActivationFunction(ml::ANN_MLP::SIGMOID_SYM,0,0);
-    ann->setTermCriteria(TermCriteria(TermCriteria::MAX_ITER+TermCriteria::EPS, 300, 0.0001));
+    ann->setTermCriteria(TermCriteria(TermCriteria::MAX_ITER+TermCriteria::EPS, 100000, 0.0001));
     ann->setTrainMethod(ml::ANN_MLP::BACKPROP, 0.0001);
 printf("sending data to train_test"); // setup the ann:
 
     // ann requires "one-hot" encoding of class labels:
-    Mat train_classes = Mat::zeros(train_data.rows, nclasses, CV_32FC1);
+    Mat train_classes = Mat::zeros(train_data.rows, nclasses, CV_32F);////should this be 32f ONLY???????
     
     
     printf("%i\n",train_classes.rows);

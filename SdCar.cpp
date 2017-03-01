@@ -28,11 +28,12 @@ using namespace std;
 int AutoDrive(){
 	
 
-Mat initframe,blurr,B_W,edges,image,flat_Img,arr_Img;
+Mat initframe,blurr,B_W,edges,reSized,flat_Img,arr_Img;
 VideoCapture cap;
+Size size(10,10);
 cap.open(0);
-cap.set(CAP_PROP_FRAME_WIDTH,10);
-cap.set(CAP_PROP_FRAME_HEIGHT,10);
+cap.set(CAP_PROP_FRAME_WIDTH,500);
+cap.set(CAP_PROP_FRAME_HEIGHT,500);
 
 
 FileStorage fs("NNPARAMS.xml",FileStorage::READ);
@@ -48,11 +49,9 @@ Ptr<ml::ANN_MLP> Neural_Net = cv::Algorithm::read<ml::ANN_MLP>(fs.root());
 				imshow("Live Stream",initframe);		//normal bgr output
 
 				cvtColor(initframe,B_W,CV_BGR2GRAY);//b&W stream
-				//imshow("greyscale",B_W);
+				
+				   GaussianBlur(B_W,blurr,Size(9,9),1.5,1.5);//blur applied so edge detction is smoother (less hard edges)
 		
-				GaussianBlur(B_W,blurr,Size(9,9),1.5,1.5);//blur applied so edge detction is smoother (less hard edges)
-				//imshow("blurr",blurr);
-	
 				Canny(blurr,edges,0,30,3);//edge detection
 				imshow("edges",edges);
 				
@@ -61,27 +60,30 @@ Ptr<ml::ANN_MLP> Neural_Net = cv::Algorithm::read<ml::ANN_MLP>(fs.root());
 					printf("\rProcessing available                           ");
 				
 					cap.read(edges);//take frame from edges
-					flat_Img = edges.reshape(1,1);//converts image row by row to 1 by x res
 					
+					resize(edges,reSized,size);//resize to 10x10
+					cout <<reSized.size()<<endl;
+					cout <<reSized<<endl;
 					
-					flat_Img.convertTo(arr_Img,CV_32F);//,1/255.0); //converts 1 by x imaeg to an array  
-					imshow("arr_img",arr_Img);//show array values on screen
+					flat_Img = reSized.reshape(1,3);//converts image row by row to 1 by x res
+					cout <<flat_Img.size()<<endl;
+					cout <<flat_Img<<endl;
 					
-					//std::vector<uchar> imageArr;//20x20 resolution = 400 bits 
-					//if(arr_Img.isContinuous())
-						//imageArr.assign(arr_Img.datastart, arr_Img.dataend);
-					//else {
-						//imageArr.insert(imageArr.end(),arr_Img.ptr<uchar>(0),arr_Img.ptr<uchar> (0)+arr_Img.cols);
-					
-						//}
-						
+					flat_Img.convertTo(arr_Img,CV_32F);// 
+			cout <<arr_Img.size()<<endl;
+					cout <<arr_Img<<endl;
 						Mat Result;
-						Mat CurrentImg = Mat::ones(arr_Img.rows,arr_Img.cols, CV_32FC1);
-						Neural_Net->predict(CurrentImg,Result);
-						cout << Result << endl;
 					
-	
-					if(waitKey(30)>= 0) break;
+					Neural_Net->predict(arr_Img,Result);
+						cout << Result << endl;	
+					//cvReleaseMat(&initframe);
+					//cvReleaseMat(&B_W);
+					//cvReleaseMat(&blurr);
+					//cvReleaseMat(&edges);
+					//cvReleaseMat(&ImgCon);
+					//cvReleaseMat(&flat_Img);
+					//cvReleaseMat(&arr_Img);
+					//cvReleaseMat(&CurrentImg);
 				}else {fflush(stdout); printf("\rObject Identified within 15cm, Waiting...");}//main object detection loop which will print error until objet is removed
 	
 	if(waitKey(30)>= 0) break;	
