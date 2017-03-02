@@ -46,14 +46,14 @@ Ptr<ml::ANN_MLP> Neural_Net = cv::Algorithm::read<ml::ANN_MLP>(fs.root());
 			cap.read(initframe);
 			if (initframe.empty()){	printf("error frame empty/n");	break;}
 		
-			//	imshow("Live Stream",initframe);		//normal bgr output
+				imshow("Live Stream",initframe);		//normal bgr output
 
 				cvtColor(initframe,B_W,CV_BGR2GRAY);//b&W stream
 				
 				GaussianBlur(B_W,blurr,Size(9,9),1.5,1.5);//blur applied so edge detction is smoother (less hard edges)
 		
 				Canny(blurr,edges,0,30,3);//edge detection
-			//	imshow("edges",edges);
+				imshow("edges",edges);
 				
 					if (ObjectDetection() ==0){//within loop where processing can occur
 						fflush(stdout);
@@ -65,39 +65,57 @@ Ptr<ml::ANN_MLP> Neural_Net = cv::Algorithm::read<ml::ANN_MLP>(fs.root());
 						if (!ReadImg.data)
 						cout << "error no file found " << endl;
 		
-	
-	
-						//	cap.read(edges);//take frame from edges
-					
 						resize(ReadImg,reSized,size);//resize to 10x10
 						cout <<reSized.size()<<endl;
-						cout <<reSized<<endl;
+						//cout <<reSized<<endl;
 					
 					reShaped = reSized.reshape(1,1);//converts image row by row to 1 by x res
 					cout <<reShaped.size()<<endl;
-					cout <<reShaped<<endl;
+					//cout <<reShaped<<endl;
 					
 					reShaped.convertTo(FinalImg,CV_32F);// 
 					cout <<FinalImg.size()<<endl;
-					cout <<FinalImg<<endl;
+					//cout <<FinalImg<<endl;
 					
 					
 					Mat Result;
 					Neural_Net->predict(FinalImg,Result);
 					cout << Result << endl;	
-					//cvReleaseMat(&initframe);
-					//cvReleaseMat(&B_W);
-					//cvReleaseMat(&blurr);
-					//cvReleaseMat(&edges);
-					//cvReleaseMat(&ImgCon);
-					//cvReleaseMat(&flat_Img);
-					//cvReleaseMat(&arr_Img);
-					//cvReleaseMat(&CurrentImg);
+					cv::Point max_loc;
+					cv::minMaxLoc(Result,0,0,&max_loc,0);
+					printf("Test Result : %i",max_loc.x);  
+					
+					switch(max_loc.x)
+					{
+					
+				case 0 :
+
+				printf("fwd\n");
+				move(MT_FORWARD, 200);
+				break;
+
+			
+				case 1 :
+				printf("fwd, right\n");
+				move(MT_FORWARD | MT_RIGHT, 200);
+				break;
+			
+				case 2 :
+				printf("fwd left\n");
+				move(MT_FORWARD | MT_LEFT, 200);
+				break;
+
+				default : printf("no value found");
+				break; 	
+						
+						
+					}
+					
 				}else {fflush(stdout); printf("\rObject Identified within 15cm, Waiting...");}//main object detection loop which will print error until objet is removed
 	
 	if(waitKey(30)>= 0) break;	
 	}//for loop for processing part being run, terminates on keypress
-		cap.release();
+			cap.release();
 }else printf("Error! unable to Connect to camera\n");//outer loop for camera being on
 }
 	return 0;
