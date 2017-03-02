@@ -74,7 +74,7 @@ cap.set(CAP_PROP_FRAME_HEIGHT,20);
 		cap.read(initframe);
 		if (initframe.empty()){	printf("error frame empty/n");	break;}
 		
-//			imshow("Live Stream",initframe);		//normal bgr output
+	imshow("Live Stream",initframe);		//normal bgr output
 
 			cvtColor(initframe,B_W,CV_BGR2GRAY);//b&W stream
 			//imshow("greyscale",B_W);
@@ -83,7 +83,7 @@ cap.set(CAP_PROP_FRAME_HEIGHT,20);
 			//imshow("blurr",blurr);
 
 			Canny(blurr,edges,0,30,3);//edge detection
-	//		imshow("edges",edges);
+		imshow("edges",edges);
 		stringstream ss;
 		string name = "";
 		string type = ".jpg";

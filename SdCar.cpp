@@ -6,6 +6,7 @@
 #include <softPwm.h>
 #include "network.h"
 #include "move.h"
+#include "init.h"
 #include <iostream>
 #include <sstream>
 #include "distance.h"
@@ -102,6 +103,7 @@ Ptr<ml::ANN_MLP> Neural_Net = cv::Algorithm::read<ml::ANN_MLP>(fs.root());
 	return 0;
 }
  
+
 void SysMenu(){
 	int choice=0;
 	while(choice !=8){

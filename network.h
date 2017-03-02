@@ -26,7 +26,7 @@ using namespace std;
 void readScanStore(){
 cv::Mat trainingData;//mat collectionn of images to train with 
 char const *path = "/home/pi/selfdrivingcarV1/train_data/";//needs folders of 0 1 2 3  holdig 50 pics each for representing outputs
-int const numFilesDirs[]={110,95,63}; //number of photos for each direction (fwd l r)
+int const numFilesDirs[]={217,217,128}; //number of photos for each direction (fwd l r)
 char const strDirs[]={'0','1','2'}; //optional outputs " 0=go,1 right 2 left
 int const numDirs = 3;//number of directions
 
@@ -38,12 +38,12 @@ for (int i=0;i!=numDirs; i++){//outer for loop to go through all 4 output option
 		for (int j=0;j!=numFiles;j++){//loop through all files within current output value
 			std::cout << "direction" << strDirs[i] << "file: " << j <<".jpg" << "\n";// print current output val and files associated with that direction
 			std::stringstream ss;
-			ss << path << strDirs[i] << "/" << j << ".jpg";//print current working image
+			ss << path << strDirs[i] << "/" <<"i (" << j+1 << ").jpg";//print current working image
 			cv::Mat img = cv::imread(ss.str(),0);
 		
 		
 		if (!img.data)
-		cout << "error no file found " << ss << endl;
+		cout << "error no file found " << ss.str() << endl;
 		
 		
 			Size size(10,10);
