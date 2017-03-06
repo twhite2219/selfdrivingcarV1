@@ -129,7 +129,7 @@ void SysMenu(){
 	printf("||Please Choose An Option..........||\n");
 	printf("||1.Test Motors   || 2.Test Sensors||\n");
 	printf("||3.Test Camera   || 4.Take tImages||\n");
-	printf("||5.Auto Drive    || 6.Test NN     ||\n");
+	printf("||5.Auto Drive    || 6.Train+TestNN||\n");
 	printf("||7.XML.store     || 8.Exit        ||\n");
 	scanf("%i",&choice);
 	
@@ -160,6 +160,7 @@ break;
 case 6 :
 trainNetwork();
 printf("end");
+TestNetwork();
 break;
 
 case 7 :

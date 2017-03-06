@@ -15,7 +15,7 @@
   <moment_scale>0.</moment_scale>
   <term_criteria>
     <epsilon>1.0000000000000000e-04</epsilon>
-    <iterations>100000</iterations></term_criteria></training_params>
+    <iterations>10000</iterations></term_criteria></training_params>
 <input_scale>
   2.6982351818199437e-02 -2.0145542389531110e-01 1.7451931979931567e-02
   -4.3362771915972315e-01 1.8954440331899525e-02 -4.7072441941694249e-01

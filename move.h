@@ -1,14 +1,30 @@
 #ifndef MOVE_H
 #define MOVE_H
-
-#include "distance.h"
+#include <stdio.h>
+#include <pigpio.h>
+#include <stdlib.h>
+#include <unistd.h>
+#include <wiringPi.h>
+#include <softPwm.h>
 #include "network.h"
+#include "move.h"
 #include "init.h"
 #include <iostream>
-#include <pigpio.h>
-//#include <stdlib.h>
-//#include <unistd.h>
-#include <wiringPi.h>
+#include <sstream>
+#include "distance.h"
+#include <linux/videodev2.h>
+#include <../include/libv4l2.h>
+#include <opencv2/core/core.hpp>
+#include <opencv2/opencv.hpp>
+#include <opencv2/imgcodecs.hpp>
+#include <opencv2/imgproc/imgproc.hpp>
+#include <opencv2/highgui/highgui.hpp>  
+#include <opencv2/videoio.hpp>
+#include <opencv2/ml.hpp>
+#include "PiCamF.h"
+using namespace cv;
+using namespace std;
+
 
 
 //EN POWER SUPPLY
@@ -24,9 +40,9 @@
 //EN2
 #define motcont2	14
 //IN3... LEFT IF HIGH
-#define M2ina 		23
+#define M2ina 		18
 //IN4... RIGHT IF HIGH
-#define M2inb 		18  
+#define M2inb 		23  
 
 //trigger a
 #define TRIGA		13
@@ -34,8 +50,32 @@
 #define TRIGB		6
 //ECHOA 
 #define ECHOA		26 
-//ECHOB
-#define ECHOB		16
+#define ECHOB   	16
+
+void initialisePins(){ 
+	wiringPiSetupGpio();
+	pinMode(motcont1,PWM_OUTPUT);//EN1
+	pinMode(M1ina,OUTPUT);//IN1
+	pinMode(M1inb,OUTPUT);//IN2
+	
+	pinMode(motcont2,PWM_OUTPUT);//EN2
+	pinMode(M2ina,OUTPUT);//IN3
+	pinMode(M2inb,OUTPUT);//IN4
+	
+	pinMode(TRIGA,OUTPUT);   
+	pinMode(TRIGB,OUTPUT);
+	pinMode(ECHOA, INPUT);
+	pinMode(ECHOB,INPUT);
+	digitalWrite(TRIGA,LOW);
+	digitalWrite(TRIGB,LOW);
+	
+	digitalWrite(M1ina,LOW);
+	digitalWrite(M1inb,LOW);
+	digitalWrite(M2ina,LOW);
+	digitalWrite(M2inb,LOW);
+	
+	delay(30);
+}
 
 
 enum MOVE_TYPE

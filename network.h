@@ -25,12 +25,13 @@ using namespace std;
 
 void readScanStore(){
 cv::Mat trainingData;//mat collectionn of images to train with 
+cv::Mat TestData;
 char const *path = "/home/pi/selfdrivingcarV1/train_data/";//needs folders of 0 1 2 3  holdig 50 pics each for representing outputs
 int const numFilesDirs[]={217,217,128}; //number of photos for each direction (fwd l r)
 char const strDirs[]={'0','1','2'}; //optional outputs " 0=go,1 right 2 left
 int const numDirs = 3;//number of directions
 
-
+cv::Mat TestLabels (0,0,(CV_32S));
 cv::Mat trainingLabels (0,0,(CV_32S));
 //same as svm??
 for (int i=0;i!=numDirs; i++){//outer for loop to go through all 4 output options
@@ -52,7 +53,10 @@ for (int i=0;i!=numDirs; i++){//outer for loop to go through all 4 output option
 			ImgCon =ImgCon.reshape(1,1);
 			//assume img is continous
 			//reshape image to 1xtotal res 
-			
+			if (j%5==0){//push every 5 images to test set
+				TestData.push_back(ImgCon);
+				TestLabels.push_back(i);
+			}
 			trainingData.push_back(ImgCon); //push back image
 			trainingLabels.push_back(i);//assign instruction corresponding to image in label set
 		}
@@ -60,14 +64,30 @@ for (int i=0;i!=numDirs; i++){//outer for loop to go through all 4 output option
 	
 trainingData.convertTo(trainingData, CV_32F);//,1/255.0);//convert all images to cv32f (numeric values)
 
-cv::FileStorage fs("VALUES.xml",FileStorage::WRITE);//store numeric values in xml file as training data values for each image.
+cv::FileStorage fs("TRAIN_VALUES.xml",FileStorage::WRITE);//store numeric values in xml file as training data values for each image.
 fs << "TrainingData" <<trainingData;//assign each image 
 fs << "classes" << trainingLabels;//assign associated classes
+
+
+cv::FileStorage ffs("TEST_VALUES.xml",FileStorage::WRITE);//store numeric values in xml file as training data values for each image.
+ffs << "TestData" <<TestData;//assign each image 
+ffs << "classes" << TestLabels;//assign associated classes
+
 
 printf("complete");
 	}
 
-void train_test(int nclasses, const Mat &train_data, const Mat &train_labels, Mat &confusion) {
+void trainNetwork() {
+   
+    int nclasses = 3;
+    cv::FileStorage fsa;
+	fsa.open("TRAIN_VALUES.xml", cv::FileStorage::READ);
+	cv::Mat train_data;
+	cv::Mat train_labels;
+	fsa["TrainingData"] >> train_data;
+	fsa["classes"] >> train_labels;
+   
+
    
     int nfeatures = train_data.cols;
     Ptr<ml::ANN_MLP> ann = ml::ANN_MLP::create();
@@ -78,7 +98,7 @@ void train_test(int nclasses, const Mat &train_data, const Mat &train_labels, Ma
     layers(3) = nclasses;      // output, 1 pin per class.
     ann->setLayerSizes(layers);
     ann->setActivationFunction(ml::ANN_MLP::SIGMOID_SYM,0,0);
-    ann->setTermCriteria(TermCriteria(TermCriteria::MAX_ITER+TermCriteria::EPS, 100000, 0.0001));
+    ann->setTermCriteria(TermCriteria(TermCriteria::MAX_ITER+TermCriteria::EPS, 10000, 0.0001));
     ann->setTrainMethod(ml::ANN_MLP::BACKPROP, 0.0001);
 printf("sending data to train_test"); // setup the ann:
 
@@ -102,24 +122,42 @@ printf("sending data to train_test"); // setup the ann:
 }	
 
 
-void trainNetwork(){
-    int nclasses = 3;
-    
-	cv::FileStorage fs;
-fs.open("VALUES.xml", cv::FileStorage::READ);
-cv::Mat trainData;
-cv::Mat classes;
-fs["TrainingData"] >> trainData;
-fs["classes"] >> classes;
-    Mat confusion(nclasses,nclasses,CV_32S, Scalar(0)); // will hold our test results
-
-
-
- train_test(nclasses, trainData, classes, confusion);
-
-   	
-}
 	
+void TestNetwork(){
+    cv::FileStorage fsa;
+	fsa.open("TEST_VALUES.xml", cv::FileStorage::READ);
+	cv::Mat test_data;
+	cv::Mat test_labels;
+	fsa["TestData"] >> test_data;
+	fsa["classes"] >> test_labels;
+	
+   cout << test_data.row(1).size()<<endl;
+	
+	FileStorage fs("NNPARAMS.xml",FileStorage::READ);
+	Ptr<ml::ANN_MLP> Neural_Net = cv::Algorithm::read<ml::ANN_MLP>(fs.root());
+	if (!Neural_Net->isTrained()) printf("network not trained \n");
 
+
+else {
+	int corrcount =0;
+			
+			for (int i=0; i<test_data.rows; i++){
+			Mat Result;
+			Neural_Net->predict(test_data.row(i),Result);
+			int truth = test_labels.at<int>(i);		
+			cv::Point max_loc;
+			
+			cv::minMaxLoc(Result,0,0,&max_loc,0);
+			int pred = max_loc.x;	
+			if (pred == truth)
+			corrcount++;
+			printf("actual : %i , Expected : %i\n",pred,truth);
+			
+					
+					
+   }printf("Test Result : %i/%i",corrcount,test_data.rows);  
+			
+}
+}
 	
 #endif
