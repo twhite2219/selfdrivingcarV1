@@ -91,14 +91,15 @@ void trainNetwork() {
    
     int nfeatures = train_data.cols;
     Ptr<ml::ANN_MLP> ann = ml::ANN_MLP::create();
-    Mat_<int> layers(4,1);
-    layers(0) = nfeatures;     // input
-    layers(1) = nclasses * 8;  // hidden
-    layers(2) = nclasses * 4;  // hidden
-    layers(3) = nclasses;      // output, 1 pin per class.
+    Mat_<int> layers(5,1);
+    layers(0) = nfeatures;     // input 100
+    layers(1) = 50;//nclasses * 16;  // hidden 51
+    layers(2) = 25;//nclasses * 8;  // hidden  24
+    layers(3) = 12;//nclasses * 4;//hidden 12
+    layers(4) = nclasses;      // output, 1 pin per class = 3.
     ann->setLayerSizes(layers);
     ann->setActivationFunction(ml::ANN_MLP::SIGMOID_SYM,0,0);
-    ann->setTermCriteria(TermCriteria(TermCriteria::MAX_ITER+TermCriteria::EPS, 1000, 0.0001));
+    ann->setTermCriteria(TermCriteria(TermCriteria::MAX_ITER+TermCriteria::EPS, 50000, 0.0001));
     ann->setTrainMethod(ml::ANN_MLP::BACKPROP, 0.0001);
 printf("sending data to train_test"); // setup the ann:
 
@@ -147,11 +148,12 @@ else {
 			int truth = test_labels.at<int>(i);		
 			cv::Point max_loc;
 			
-			cv::minMaxLoc(Result,0,0,&max_loc,0);
+			cv::minMaxLoc(Result,0,0,0,&max_loc);
 			int pred = max_loc.x;	
 			if (pred == truth)
 			corrcount++;
-			printf("actual : %i , Expected : %i\n",pred,truth);
+			cout << Result <<endl;
+			printf("::::  actual : %i , Expected : %i\n",pred,truth);
 			
 					
 					

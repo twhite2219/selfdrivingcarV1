@@ -82,7 +82,7 @@ Ptr<ml::ANN_MLP> Neural_Net = cv::Algorithm::read<ml::ANN_MLP>(fs.root());
 					Neural_Net->predict(FinalImg,Result);
 					cout << Result << endl;	
 					cv::Point max_loc;
-					cv::minMaxLoc(Result,0,0,&max_loc,0);
+					cv::minMaxLoc(Result,0,0,0,&max_loc);
 					printf("Test Result : %i",max_loc.x);  
 					
 					switch(max_loc.x)
