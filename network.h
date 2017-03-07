@@ -27,7 +27,7 @@ void readScanStore(){
 cv::Mat trainingData;//mat collectionn of images to train with 
 cv::Mat TestData;
 char const *path = "/home/pi/selfdrivingcarV1/train_data/";//needs folders of 0 1 2 3  holdig 50 pics each for representing outputs
-int const numFilesDirs[]={217,217,128}; //number of photos for each direction (fwd l r)
+int const numFilesDirs[]={128,217,217}; //number of photos for each direction ()LEFT =0 RIGHT =1 straight =2
 char const strDirs[]={'0','1','2'}; //optional outputs " 0=go,1 right 2 left
 int const numDirs = 3;//number of directions
 
@@ -61,7 +61,7 @@ for (int i=0;i!=numDirs; i++){//outer for loop to go through all 4 output option
 			trainingLabels.push_back(i);//assign instruction corresponding to image in label set
 		}
 	}  
-	
+	TestData.convertTo(TestData, CV_32F);
 trainingData.convertTo(trainingData, CV_32F);//,1/255.0);//convert all images to cv32f (numeric values)
 
 cv::FileStorage fs("TRAIN_VALUES.xml",FileStorage::WRITE);//store numeric values in xml file as training data values for each image.
@@ -98,7 +98,7 @@ void trainNetwork() {
     layers(3) = nclasses;      // output, 1 pin per class.
     ann->setLayerSizes(layers);
     ann->setActivationFunction(ml::ANN_MLP::SIGMOID_SYM,0,0);
-    ann->setTermCriteria(TermCriteria(TermCriteria::MAX_ITER+TermCriteria::EPS, 10000, 0.0001));
+    ann->setTermCriteria(TermCriteria(TermCriteria::MAX_ITER+TermCriteria::EPS, 1000, 0.0001));
     ann->setTrainMethod(ml::ANN_MLP::BACKPROP, 0.0001);
 printf("sending data to train_test"); // setup the ann:
 

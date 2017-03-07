@@ -90,8 +90,8 @@ Ptr<ml::ANN_MLP> Neural_Net = cv::Algorithm::read<ml::ANN_MLP>(fs.root());
 					
 				case 0 :
 
-				printf("fwd\n");
-				move(MT_FORWARD, 200);
+				printf("fwd left\n");
+				move(MT_FORWARD| MT_LEFT, 200);
 				break;
 
 			
@@ -101,7 +101,7 @@ Ptr<ml::ANN_MLP> Neural_Net = cv::Algorithm::read<ml::ANN_MLP>(fs.root());
 				break;
 			
 				case 2 :
-				printf("fwd left\n");
+				printf("fwd\n");
 				move(MT_FORWARD | MT_LEFT, 200);
 				break;
 
