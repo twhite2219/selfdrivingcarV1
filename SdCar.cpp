@@ -27,7 +27,8 @@ using namespace std;
  
 void AutoDrive(){
 	
-
+int prevDir=4 ;
+int newDir=4;
 Mat initframe,blurr,B_W,edges,reSized,reShaped,ReadImg,FinalImg;
 VideoCapture cap;
 Size size(10,10);
@@ -83,25 +84,28 @@ Ptr<ml::ANN_MLP> Neural_Net = cv::Algorithm::read<ml::ANN_MLP>(fs.root());
 					cv::Point max_loc;
 					cv::minMaxLoc(Result,0,0,0,&max_loc);
 					printf("Test Result : %i",max_loc.x);  
+					newDir=max_loc.x;
 					
+					if(newDir!=prevDir){
+						resetMotors();
 					switch(max_loc.x)
 					{
 					
 				case 0 :
 
 				printf("fwd left\n");
-				move(MT_FORWARD| MT_LEFT, 200);
+				move(MT_FORWARD| MT_LEFT,0);
 				break;
 
 			
 				case 1 :
 				printf("fwd, right\n");
-				move(MT_FORWARD | MT_RIGHT, 200);
+				move(MT_FORWARD | MT_RIGHT,0);
 				break;
 			
 				case 2 :
 				printf("fwd\n");
-				move(MT_FORWARD | MT_LEFT, 200);
+				move(MT_FORWARD,0);
 				break;
 
 				default : printf("no value found");
@@ -109,8 +113,10 @@ Ptr<ml::ANN_MLP> Neural_Net = cv::Algorithm::read<ml::ANN_MLP>(fs.root());
 						
 						
 					}
+				}
+					prevDir=max_loc.x;
 					
-				}else {fflush(stdout); printf("\rObject Identified within 15cm, Waiting...");}//main object detection loop which will print error until objet is removed
+				}else {resetMotors(); fflush(stdout); printf("\rObject Identified within 15cm, Waiting...");}//main object detection loop which will print error until objet is removed
 	
 	if(waitKey(30)>= 0) break;	
 	}//for loop for processing part being run, terminates on keypress

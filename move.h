@@ -7,7 +7,6 @@
 #include <wiringPi.h>
 #include <softPwm.h>
 #include "network.h"
-#include "move.h"
 #include <iostream>
 #include <sstream>
 #include "distance.h"
@@ -111,8 +110,12 @@ void move(unsigned int flags, int msecs)
 	else if(b) { digitalWrite(M1inb,HIGH); }
 	if(l) { digitalWrite(M2ina,HIGH); }
 	else if(r) { digitalWrite(M2inb,HIGH); }
-	
 	delay(msecs);
+	
+}
+
+void resetMotors(){
+	
 	
 	digitalWrite(M1ina,LOW);
 	digitalWrite(M1inb,LOW);
@@ -124,21 +127,25 @@ void move(unsigned int flags, int msecs)
 	
 	delay(50);
 }
-
 void TestMotor(){
 	printf("fwd\n");
-	move(MT_FORWARD, 3000);
+	move(MT_FORWARD,3000);
+	resetMotors();
 	printf("bwd\n");
 	move(MT_BACKWARD, 3000);
+	resetMotors();
 	printf("rght\n");
 		move(MT_RIGHT, 3000);
+	resetMotors();
 	printf("left\n");
 	move(MT_LEFT, 3000);
+	resetMotors();
 	printf("fwd, right\n");
 	move(MT_FORWARD | MT_RIGHT, 3000);
+	resetMotors();
 	printf("fwd left\n");
 	move(MT_FORWARD | MT_LEFT, 3000);
-	
+	resetMotors();
 	
 }
 
