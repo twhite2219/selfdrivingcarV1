@@ -8,7 +8,6 @@
 #include <softPwm.h>
 #include "network.h"
 #include "move.h"
-#include "init.h"
 #include <iostream>
 #include <sstream>
 #include "distance.h"

@@ -2,7 +2,6 @@
 #define PICAMF_H
 
 #include "distance.h"
-#include "init.h"
 #include <iostream>
 #include "network.h"
 #include <sstream>

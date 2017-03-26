@@ -6,7 +6,6 @@
 #include <softPwm.h>
 #include "network.h"
 #include "move.h"
-#include "init.h"
 #include <iostream>
 #include <sstream>
 #include "distance.h"
@@ -26,7 +25,7 @@ using namespace std;
  
  
  
-int AutoDrive(){
+void AutoDrive(){
 	
 
 Mat initframe,blurr,B_W,edges,reSized,reShaped,ReadImg,FinalImg;
@@ -118,7 +117,6 @@ Ptr<ml::ANN_MLP> Neural_Net = cv::Algorithm::read<ml::ANN_MLP>(fs.root());
 			cap.release();
 }else printf("Error! unable to Connect to camera\n");//outer loop for camera being on
 }
-	return 0;
 }
  
 
