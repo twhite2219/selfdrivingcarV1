@@ -26,20 +26,20 @@ using namespace std;
 void readScanStore(){
 cv::Mat trainingData;//mat collectionn of images to train with 
 cv::Mat TestData;
-char const *path = "/home/pi/selfdrivingcarV1/train_data/";//needs folders of 0 1 2 3  holdig 50 pics each for representing outputs
-int const numFilesDirs[]={128,217,217}; //number of photos for each direction ()LEFT =0 RIGHT =1 straight =2
+char const *path = "/home/pi/selfdrivingcarV1/train_data/";//needs folders of 0 1 2 holding training data fr resenting outputs
+int const numFilesDirs[]={875,790,0};///////change!!!!11111!!!!!!!!!!!!!!! //number of photos for each direction ()LEFT =0 straight =1 right =2
 char const strDirs[]={'0','1','2'}; //optional outputs " 
 int const numDirs = 3;//number of directions
 
 cv::Mat TestLabels (0,0,(CV_32S));
 cv::Mat trainingLabels (0,0,(CV_32S));
 //same as svm??
-for (int i=0;i!=numDirs; i++){//outer for loop to go through all 4 output options
+for (int i=0;i!=numDirs; i++){//outer for loop to go through all 3 output options
 	int numFiles = numFilesDirs[i];//assign inner loop based on size of samples from current outerloop val
 		for (int j=0;j!=numFiles;j++){//loop through all files within current output value
 			std::cout << "direction" << strDirs[i] << "file: " << j <<".jpg" << "\n";// print current output val and files associated with that direction
 			std::stringstream ss;
-			ss << path << strDirs[i] << "/" <<"i (" << j+1 << ").jpg";//print current working image
+			ss << path << strDirs[i] << "/"<< j <<".jpg";			//"/" <<"i (" << j+1 << ").jpg";//print current working image
 			cv::Mat img = cv::imread(ss.str(),0);
 		
 		

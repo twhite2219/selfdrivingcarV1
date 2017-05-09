@@ -81,33 +81,39 @@ Ptr<ml::ANN_MLP> Neural_Net = cv::Algorithm::read<ml::ANN_MLP>(fs.root());
 					
 					Mat Result;
 					Neural_Net->predict(FinalImg,Result);
-					cout << Result <<"\n"<< endl;	
+					cout << Result << endl;	
 					cv::Point max_loc;
 					cv::minMaxLoc(Result,0,0,0,&max_loc);
 					cout<< "Test Result :" << max_loc.x << endl;  
 					newDir=max_loc.x;
 					
-					if(newDir!=prevDir){
+					if(newDir==prevDir){
+					cout<< "continuing...." << endl;
+						
+					}else{
+						cout<< "change detected... resetting..."<< endl;
 						resetMotors();
 					switch(max_loc.x)
 					{
 					
 				case 0 :
 
-				printf("fwd left\n");
+				cout<< "fwd left"<<endl;
 				move(MT_FORWARD| MT_LEFT,100);
 				break;
 
 			
 				case 1 :
-				printf("fwd, right\n");
+				cout<< "fwd"<<endl;
+				move(MT_FORWARD,100);
+				break;
+				
+				case 2 :
+				cout<< "fwd right"<<endl;
 				move(MT_FORWARD | MT_RIGHT,100);
 				break;
 			
-				case 2 :
-				printf("fwd\n");
-				move(MT_FORWARD,100);
-				break;
+				
 
 				default : printf("no value found");
 				break; 	

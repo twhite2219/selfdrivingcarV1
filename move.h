@@ -134,22 +134,28 @@ void resetMotors(){
 }
 void TestMotor(){
 	printf("fwd\n");
-	move(MT_FORWARD,3000);
+	move(MT_FORWARD,0);
+	delay(3000);
 	resetMotors();
 	printf("bwd\n");
-	move(MT_BACKWARD, 3000);
+	move(MT_BACKWARD,0);
+	delay(3000);
 	resetMotors();
 	printf("rght\n");
-		move(MT_RIGHT, 3000);
+	move(MT_RIGHT,0);
+	delay(3000);
 	resetMotors();
 	printf("left\n");
-	move(MT_LEFT, 3000);
+	move(MT_LEFT,0);
+	delay(3000);
 	resetMotors();
 	printf("fwd, right\n");
-	move(MT_FORWARD | MT_RIGHT, 3000);
+	move(MT_FORWARD | MT_RIGHT,0);
+	delay(3000);
 	resetMotors();
 	printf("fwd left\n");
-	move(MT_FORWARD | MT_LEFT, 3000);
+	move(MT_FORWARD | MT_LEFT,0);
+	delay(3000);
 	resetMotors();
 	
 }

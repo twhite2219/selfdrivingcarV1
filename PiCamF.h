@@ -6,6 +6,7 @@
 #include "network.h"
 #include <sstream>
 #include "distance.h"
+#include "move.h"
 #include <linux/videodev2.h>
 #include <../include/libv4l2.h>
 #include <opencv2/core/core.hpp>
@@ -14,7 +15,7 @@
 #include <opencv2/imgproc/imgproc.hpp>
 #include <opencv2/highgui/highgui.hpp>  
 #include <opencv2/videoio.hpp>
-#include "move.h"
+
 using namespace cv;
 using namespace std;
 
@@ -58,7 +59,6 @@ if(waitKey(30)>= 0) break;
  void takephotos(){
 	 
 	 
-
 Mat initframe,blurr,B_W,edges,image,flat_Img,arr_Img;
 VideoCapture cap;
 cap.open(0);
