@@ -33,8 +33,8 @@ Mat initframe,blurr,B_W,edges,reSized,reShaped,ReadImg,FinalImg;
 VideoCapture cap;
 Size size(10,10);
 cap.open(0);
-cap.set(CAP_PROP_FRAME_WIDTH,50);
-cap.set(CAP_PROP_FRAME_HEIGHT,50);
+cap.set(CAP_PROP_FRAME_WIDTH,500);
+cap.set(CAP_PROP_FRAME_HEIGHT,500);
 
 
 FileStorage fs("NNPARAMS.xml",FileStorage::READ);
@@ -66,24 +66,25 @@ Ptr<ml::ANN_MLP> Neural_Net = cv::Algorithm::read<ml::ANN_MLP>(fs.root());
 						cout << "error no file found " << endl;
 		
 						resize(ReadImg,reSized,size);//resize to 10x10
-						cout <<reSized.size()<<endl;
+						//cout <<reSized.size()<<endl;
 						//cout <<reSized<<endl;
 					
+					cv::imwrite("currImgresize.jpg", reSized);
 					reShaped = reSized.reshape(1,1);//converts image row by row to 1 by x res
-					cout <<reShaped.size()<<endl;
+					//cout <<reShaped.size()<<endl;
 					//cout <<reShaped<<endl;
 					
 					reShaped.convertTo(FinalImg,CV_32F);// 
-					cout <<FinalImg.size()<<endl;
+					//cout <<FinalImg.size()<<endl;
 					//cout <<FinalImg<<endl;
 					
 					
 					Mat Result;
 					Neural_Net->predict(FinalImg,Result);
-					cout << Result << endl;	
+					cout << Result <<"\n"<< endl;	
 					cv::Point max_loc;
 					cv::minMaxLoc(Result,0,0,0,&max_loc);
-					printf("Test Result : %i",max_loc.x);  
+					cout<< "Test Result :" << max_loc.x << endl;  
 					newDir=max_loc.x;
 					
 					if(newDir!=prevDir){
@@ -94,18 +95,18 @@ Ptr<ml::ANN_MLP> Neural_Net = cv::Algorithm::read<ml::ANN_MLP>(fs.root());
 				case 0 :
 
 				printf("fwd left\n");
-				move(MT_FORWARD| MT_LEFT,0);
+				move(MT_FORWARD| MT_LEFT,100);
 				break;
 
 			
 				case 1 :
 				printf("fwd, right\n");
-				move(MT_FORWARD | MT_RIGHT,0);
+				move(MT_FORWARD | MT_RIGHT,100);
 				break;
 			
 				case 2 :
 				printf("fwd\n");
-				move(MT_FORWARD,0);
+				move(MT_FORWARD,100);
 				break;
 
 				default : printf("no value found");
@@ -116,7 +117,7 @@ Ptr<ml::ANN_MLP> Neural_Net = cv::Algorithm::read<ml::ANN_MLP>(fs.root());
 				}
 					prevDir=max_loc.x;
 					
-				}else {resetMotors(); fflush(stdout); printf("\rObject Identified within 15cm, Waiting...");}//main object detection loop which will print error until objet is removed
+				}else {resetMotors(); cout << "Object Identified within 15cm, Waiting..."<<endl;}//main object detection loop which will print error until objet is removed
 	
 	if(waitKey(30)>= 0) break;	
 	}//for loop for processing part being run, terminates on keypress

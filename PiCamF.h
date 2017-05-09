@@ -93,7 +93,8 @@ cap.set(CAP_PROP_FRAME_HEIGHT,20);
 		string filename = ss.str();
 		ss.str("");
 		imwrite(filename, edges);
-		delay(200);
+		//cout << "saving to" << filename;
+		delay(150);
 			
 	if(waitKey(30)>= 0) break;	
 }

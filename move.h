@@ -72,7 +72,7 @@ void initialisePins(){
 	digitalWrite(M2ina,LOW);
 	digitalWrite(M2inb,LOW);
 	
-	delay(30);
+	delay(100);
 }
 
 
@@ -103,8 +103,11 @@ void move(unsigned int flags, int msecs)
 		l = isset(flags, MT_LEFT),
 		r = isset(flags, MT_RIGHT);
 	
-	pwmWrite(motcont1,powerON);
-	pwmWrite(motcont2,powerON);
+	
+	digitalWrite(motcont1,HIGH);
+	digitalWrite(motcont2,HIGH);
+	//pwmWrite(motcont1,powerON);
+	//pwmWrite(motcont2,powerON);
 		
 	if(f) { digitalWrite(M1ina,HIGH); }
 	else if(b) { digitalWrite(M1inb,HIGH); }
@@ -121,11 +124,13 @@ void resetMotors(){
 	digitalWrite(M1inb,LOW);
 	digitalWrite(M2ina,LOW);
 	digitalWrite(M2inb,LOW);	
+	digitalWrite(motcont1,LOW);
+	digitalWrite(motcont2,LOW);
 	
-	pwmWrite(motcont1,powerOFF);
-	pwmWrite(motcont2,powerOFF);
+	//pwmWrite(motcont1,powerOFF);
+	//pwmWrite(motcont2,powerOFF);
 	
-	delay(50);
+	delay(200);
 }
 void TestMotor(){
 	printf("fwd\n");
