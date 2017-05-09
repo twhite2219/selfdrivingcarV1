@@ -27,7 +27,7 @@ void readScanStore(){
 cv::Mat trainingData;//mat collectionn of images to train with 
 cv::Mat TestData;
 char const *path = "/home/pi/selfdrivingcarV1/train_data/";//needs folders of 0 1 2 holding training data fr resenting outputs
-int const numFilesDirs[]={875,790,0};///////change!!!!11111!!!!!!!!!!!!!!! //number of photos for each direction ()LEFT =0 straight =1 right =2
+int const numFilesDirs[]={875,790,860};///////change!!!!11111!!!!!!!!!!!!!!! //number of photos for each direction ()LEFT =0 straight =1 right =2
 char const strDirs[]={'0','1','2'}; //optional outputs " 
 int const numDirs = 3;//number of directions
 
@@ -37,15 +37,15 @@ cv::Mat trainingLabels (0,0,(CV_32S));
 for (int i=0;i!=numDirs; i++){//outer for loop to go through all 3 output options
 	int numFiles = numFilesDirs[i];//assign inner loop based on size of samples from current outerloop val
 		for (int j=0;j!=numFiles;j++){//loop through all files within current output value
-			std::cout << "direction" << strDirs[i] << "file: " << j <<".jpg" << "\n";// print current output val and files associated with that direction
+			std::cout << "direction" << strDirs[i] << "file: " << j+1 <<".jpg" << "\n";// print current output val and files associated with that direction
 			std::stringstream ss;
-			ss << path << strDirs[i] << "/"<< j <<".jpg";			//"/" <<"i (" << j+1 << ").jpg";//print current working image
+			ss << path << strDirs[i] << "/"<< j+1 <<".jpg";			//"/" <<"i (" << j+1 << ").jpg";//print current working image
 			cv::Mat img = cv::imread(ss.str(),0);
 		
 		
 		if (!img.data)
 		cout << "error no file found " << ss.str() << endl;
-		
+		else{
 		
 			Size size(10,10);
 			Mat ImgCon;
@@ -59,7 +59,7 @@ for (int i=0;i!=numDirs; i++){//outer for loop to go through all 3 output option
 			}
 			trainingData.push_back(ImgCon); //push back image
 			trainingLabels.push_back(i);//assign instruction corresponding to image in label set
-		}
+		}}
 	}  
 	TestData.convertTo(TestData, CV_32F);
 trainingData.convertTo(trainingData, CV_32F);//,1/255.0);//convert all images to cv32f (numeric values)
@@ -99,7 +99,7 @@ void trainNetwork() {
     layers(4) = nclasses;      // output, 1 pin per class = 3.
     ann->setLayerSizes(layers);
     ann->setActivationFunction(ml::ANN_MLP::SIGMOID_SYM,0,0);
-    ann->setTermCriteria(TermCriteria(TermCriteria::MAX_ITER+TermCriteria::EPS, 50000, 0.0001));
+    ann->setTermCriteria(TermCriteria(TermCriteria::MAX_ITER+TermCriteria::EPS, 20000, 0.0001));
     ann->setTrainMethod(ml::ANN_MLP::BACKPROP, 0.0001);
 printf("sending data to train_test"); // setup the ann:
 

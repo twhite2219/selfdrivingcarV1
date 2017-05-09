@@ -56,6 +56,7 @@ Ptr<ml::ANN_MLP> Neural_Net = cv::Algorithm::read<ml::ANN_MLP>(fs.root());
 				imshow("edges",edges);
 				
 					if (ObjectDetection() ==0){//within loop where processing can occur
+					
 						fflush(stdout);
 						printf("\rProcessing available                           ");
 						cv::imwrite("currImg.jpg", edges);
@@ -93,24 +94,24 @@ Ptr<ml::ANN_MLP> Neural_Net = cv::Algorithm::read<ml::ANN_MLP>(fs.root());
 					}else{
 						cout<< "change detected... resetting..."<< endl;
 						resetMotors();
-					switch(max_loc.x)
+					switch(newDir)
 					{
 					
 				case 0 :
 
 				cout<< "fwd left"<<endl;
-				move(MT_FORWARD| MT_LEFT,100);
+				move(MT_FORWARD| MT_LEFT,0);
 				break;
 
 			
 				case 1 :
 				cout<< "fwd"<<endl;
-				move(MT_FORWARD,100);
+				move(MT_FORWARD,0);
 				break;
 				
 				case 2 :
 				cout<< "fwd right"<<endl;
-				move(MT_FORWARD | MT_RIGHT,100);
+				move(MT_FORWARD | MT_RIGHT,0);
 				break;
 			
 				
@@ -123,7 +124,9 @@ Ptr<ml::ANN_MLP> Neural_Net = cv::Algorithm::read<ml::ANN_MLP>(fs.root());
 				}
 					prevDir=max_loc.x;
 					
-				}else {resetMotors(); cout << "Object Identified within 15cm, Waiting..."<<endl;}//main object detection loop which will print error until objet is removed
+				}else {prevDir=4;
+					resetMotors(); 
+					cout << "Object Identified within 10cm, Waiting..."<<endl;}//main object detection loop which will print error until objet is removed
 	
 	if(waitKey(30)>= 0) break;	
 	}//for loop for processing part being run, terminates on keypress
