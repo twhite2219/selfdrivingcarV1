@@ -57,8 +57,8 @@ Ptr<ml::ANN_MLP> Neural_Net = cv::Algorithm::read<ml::ANN_MLP>(fs.root());
 				
 					if (ObjectDetection() ==0){//within loop where processing can occur
 					
-						fflush(stdout);
-						printf("\rProcessing available                           ");
+						//fflush(stdout);
+						//printf("\rProcessing available\n");
 						cv::imwrite("currImg.jpg", edges);
 				
 				
@@ -82,36 +82,36 @@ Ptr<ml::ANN_MLP> Neural_Net = cv::Algorithm::read<ml::ANN_MLP>(fs.root());
 					
 					Mat Result;
 					Neural_Net->predict(FinalImg,Result);
-					cout << Result << endl;	
+					//cout << Result << endl;	
 					cv::Point max_loc;
 					cv::minMaxLoc(Result,0,0,0,&max_loc);
-					cout<< "Test Result :" << max_loc.x << endl;  
+					//cout<< "Test Result :" << max_loc.x << endl;  
 					newDir=max_loc.x;
 					
 					if(newDir==prevDir){
-					cout<< "continuing...." << endl;
+					//cout<< "continuing...." << "\n";
 						
 					}else{
-						cout<< "change detected... resetting..."<< endl;
+						cout<< "change detected... resetting..."<<"\n";//
 						resetMotors();
 					switch(newDir)
 					{
 					
 				case 0 :
 
-				cout<< "fwd left"<<endl;
-				move(MT_FORWARD| MT_LEFT,0);
+				cout<< "fwd left"<<"\n";//<<endl;
+				move(MT_FORWARD| MT_LEFT,100);
 				break;
 
 			
 				case 1 :
-				cout<< "fwd"<<endl;
-				move(MT_FORWARD,0);
+				cout<< "fwd"<<"\n";//<<endl;
+				move(MT_FORWARD,100);
 				break;
 				
 				case 2 :
-				cout<< "fwd right"<<endl;
-				move(MT_FORWARD | MT_RIGHT,0);
+				cout<< "fwd right"<<"\n";//<<endl;
+				move(MT_FORWARD | MT_RIGHT,100);
 				break;
 			
 				
@@ -122,11 +122,11 @@ Ptr<ml::ANN_MLP> Neural_Net = cv::Algorithm::read<ml::ANN_MLP>(fs.root());
 						
 					}
 				}
-					prevDir=max_loc.x;
+					prevDir=newDir;
 					
 				}else {prevDir=4;
 					resetMotors(); 
-					cout << "Object Identified within 10cm, Waiting..."<<endl;}//main object detection loop which will print error until objet is removed
+					cout << "Object Identified within 15cm, Waiting..."<<"\n";}//<<endl;}//main object detection loop which will print error until objet is removed
 	
 	if(waitKey(30)>= 0) break;	
 	}//for loop for processing part being run, terminates on keypress

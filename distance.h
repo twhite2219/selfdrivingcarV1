@@ -2,6 +2,7 @@
 #ifndef DISTANCE_H
 #define DISTANCE_H
 #include <stdio.h>
+#include <cstdlib>
 #include <pigpio.h>
 #include <stdlib.h>
 #include <unistd.h>
@@ -93,7 +94,7 @@ void TestSensors(){
 int ObjectDetection(){
 	int A= (DistanceSenseA());
 	int B= (DistanceSenseB());
-	if(A<15 || B<15)
+	if(A<15 && B<15)
 	return 1;
 	else return 0;
 	} 

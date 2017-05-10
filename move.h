@@ -118,7 +118,7 @@ void move(unsigned int flags, int msecs)
 }
 
 void resetMotors(){
-	
+	cout<<"resetting motors\n";
 	
 	digitalWrite(M1ina,LOW);
 	digitalWrite(M1inb,LOW);
